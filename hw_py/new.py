@@ -1,2 +1,3 @@
-a = 1
+print("Enter number: ")
+a = input()
 print(a)
