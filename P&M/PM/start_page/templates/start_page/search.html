@@ -17,9 +17,11 @@
 <a href="{{medcine.general_documentation}}">
 {{medcine.general_documentation}}
 </a>
-{%for synonyms in all_synonyms%}
+
 <ul>
+    {%for synonyms in all_synonyms%}
     <li>{{synonyms.comm_name}}</li>
+    {%endfor%}
 </ul>
-{%endfor%}
+
 {%endblock body_content%}

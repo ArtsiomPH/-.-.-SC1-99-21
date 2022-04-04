@@ -4,26 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock title %}</title>
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8">
-            <h2><a href = "/">Pregnancy and medicines</a></h2>
-        </div>
-        <div class="col-lg-4">
-            <form method="get" id="search" action="{% url 'start_page:search' %}">
-                <div class="input-group mb-3">
-                    {% block form %}{% endblock form %}
-                    <button class="btn btn-outline-secondary" type="submit" id="button_search">Искать</button>
+<div class="container" id="nav">
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #F5DFC3;">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand mb-0 h1">Pregnancy and medcine</a>
+            <form class="d-flex" method="get" id="search" action="{% url 'start_page:search' %}">
+                <div class="col-s-6">
+                {% block form %}{% endblock form %}
                 </div>
+                <button class="btn btn-outline-primary" type="submit">Поиск</button>
             </form>
         </div>
-    </div>
-{% block body_content %} {% endblock body_content %}
+    </nav>
+</div>
+<br>
+<div class="container">
+    {% block body_content %} {% endblock body_content %}
+</div>
+<div class="container">
     <div class="footer">
         <div class="row" id="footer">
             <div class="col-lg-6 col-sm-6">
