@@ -2,26 +2,31 @@
 {% block form %}{{search_form}}{% endblock form %}
 {% block title %}{{search_name}}{% endblock title %}
 {%block body_content%}
-<p>
-{{synonyms.comm_name}}
-</p>
-<p>
-{{medcine.general_info}}
-</p>
-<p>
-{{medcine.general_sources}}
-</p>
-<p>
-МНН: {{medcine.international_name}}
-</p>
-<a href="{{medcine.general_documentation}}">
-{{medcine.general_documentation}}
-</a>
-
-<ul>
-    {%for synonyms in all_synonyms%}
-    <li>{{synonyms.comm_name}}</li>
-    {%endfor%}
-</ul>
-
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8" id="info" style="text-align: justify">
+            <h4>Общая информация</h4>
+            <p>Действующим веществом препарата {{synonym.comm_name}} является <a href="{{medcine.general_documentation}}">{{medcine.international_name}}</a></p>
+            <p>{{medcine.general_info}}</p>
+        </div>
+        <div class="col-lg-4">
+            <h4>Аналоги</h4>
+            <ul class="list-group list-group-flush">
+                {%for synonyms in all_synonyms%}
+                <li class="list-group-item">{{synonyms.comm_name}}</li>
+                {%endfor%}
+            </ul>
+        </div>
+    </div>
+<br>
+    <div class="row">
+        <div class="col-lg-8" style="text-align: justify">
+            <ol class="list-group list-group-numbered">
+            {% for source in sources %}
+                <li class="list-group-item">{{source.source_name}}</li>
+            {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
 {%endblock body_content%}

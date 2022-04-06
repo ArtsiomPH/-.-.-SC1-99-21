@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import Search
-from .models import Medcine, Synonyms
+from .models import Medcine, Synonyms, General_sources
 from django.http import HttpResponseRedirect
 
 
@@ -12,18 +12,13 @@ def index(request):
 
 
 def search_medcine(request):
-    search = Search()
     medcine_name = request.GET.get("medcine_name")
     try:
         result = Synonyms.objects.get(comm_name=medcine_name)
     except Synonyms.DoesNotExist:
         return HttpResponseRedirect("/error")
     else:
-        medcine_id_in_database = Synonyms.objects.get(comm_name=medcine_name).medcine.id
-        medcine = Medcine.objects.get(id=medcine_id_in_database)
-        all_synonyms = medcine.synonyms_set.all()
-        data = {"search_form":search, "medcine":medcine, "search_name":medcine_name, "synonym":result, "all_synonyms":all_synonyms}
-        return render(request, "start_page/search.html", context=data)
+        return redirect("start_page:search_param", result.url_name)
 
 def search_param(request, url_name):
     search = Search()
@@ -32,11 +27,10 @@ def search_param(request, url_name):
     except Synonyms.DoesNotExist:
         return HttpResponseRedirect("/error")
     else:
-        medcine_name = url_name
-        medcine_id_in_database = Synonyms.objects.get(url_name=url_name).medcine.id
-        medcine = Medcine.objects.get(id=medcine_id_in_database)
-        all_synonyms = medcine.synonyms_set.all()
-        data = {"search_form":search, "medcine":medcine, "search_name":medcine_name, "synonym":result, "all_synonyms":all_synonyms}
+        medcine = Medcine.objects.get(synonyms__url_name=url_name)
+        all_synonyms = medcine.synonyms_set.all().exclude(url_name=url_name)
+        general_sources = medcine.general_sources_set.all()
+        data = {"search_form":search, "medcine":medcine, "synonym":result, "all_synonyms":all_synonyms, "sources":general_sources}
         return render(request, "start_page/search.html", context=data)
 
 def about(request):

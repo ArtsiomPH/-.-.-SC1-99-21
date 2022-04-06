@@ -3,6 +3,7 @@
     min-height: 300px;
     background: transparent;
     width: 100%;
+    border-radius: 10px;
 }
 h4 {
     text-align: center;
@@ -13,12 +14,17 @@ img[src="mother.jpg"] {
     margin-top: 5px;
     margin-bottom: 10px
 }
-.footer {
-    font-size: small;
-}
 a {
     text-decoration: none;
 }
 a:hover {
     text-decoration: underline;
+}
+#info {
+    border: 2px inset rgb(59, 73, 162);
+    border-radius: 5px;
+    -webkit-box-shadow: 5px 6px 12px -2px rgba(0,0,0,0.87);
+    box-shadow: 5px 6px 12px -2px rgba(0,0,0,0.87);
+    background-color: #BED2F3;
+
 }

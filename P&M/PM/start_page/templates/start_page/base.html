@@ -10,15 +10,17 @@
 </head>
 <body>
 <div class="container" id="nav">
-    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #F5DFC3;">
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #F5DFC3; border-radius: 5px">
         <div class="container-fluid">
-            <a href="/" class="navbar-brand mb-0 h1">Pregnancy and medcine</a>
-            <form class="d-flex" method="get" id="search" action="{% url 'start_page:search' %}">
-                <div class="col-s-6">
-                {% block form %}{% endblock form %}
-                </div>
-                <button class="btn btn-outline-primary" type="submit">Поиск</button>
-            </form>
+            <div class="col-sm-12 col-md-5 col-lg-7">
+                <a href="/" class="navbar-brand mb-0" style="font-size: x-large">Pregnancy and medcine</a>
+            </div>
+            <div class="col-sm-12 col-md-7 col-lg-5">
+                <form class="d-flex" method="get" id="search" autocomplete="off" action="{% url 'start_page:search' %}">
+                    {% block form %}{% endblock form %}
+                    <button class="btn btn-outline-secondary" type="submit">Поиск</button>
+                </form>
+            </div>
         </div>
     </nav>
 </div>
@@ -26,19 +28,28 @@
 <div class="container">
     {% block body_content %} {% endblock body_content %}
 </div>
-<div class="container">
-    <div class="footer">
-        <div class="row" id="footer">
-            <div class="col-lg-6 col-sm-6">
-                <p><a href="{% url 'start_page:about' %}">О проекте</a></p>
-                <p><a href="{% url 'start_page:policy' %}">Условия пользования</a></p>
-            </div>
-            <div class="col-lg-6 col-sm-6">
-                <p style="white-space: pre-line; line-height: 30px; text-align: right">Если у вас остались вопросы,
-                    обращайтесь к нам:<a href="mailto:#"></a></p>
+<div class="container my-5">
+    <footer style="background-color: #F5DFC3; border-radius: 5px">
+        <div class="container p-2">
+            <div class="row">
+                <div class="col-lg-6 col-sm-4 col-xs-2">
+                    <p class="mb-4" style="letter-spacing: 1px; font-size: small"><a style="color:#818963;"
+                                                                                     href="{% url 'start_page:about' %}">О
+                        проекте</a></p>
+                    <p class="mb-4" style="letter-spacing: 1px; font-size: small"><a style="color:#818963;"
+                                                                                     href="{% url 'start_page:policy' %}">Условия
+                        пользования</a></p>
+                </div>
+                <div class="col-lg-6 col-sm-8 col-xs-10">
+                    <p class="mb-4" style="letter-spacing: 1px; font-size: small; color: #818963; text-align: right">
+                        Если у вас остались вопросы,
+                        обращайтесь к нам:</p>
+                    <p class="mb-4" style="letter-spacing: 1px; font-size: small; text-align: right"><a
+                            href="mailto:p&m@info.com" style="color: #4f4f4f;">p&m@info.com</a></p>
+                </div>
             </div>
         </div>
-    </div>
+    </footer>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/parallax.js/1.4.2/parallax.min.js"></script>

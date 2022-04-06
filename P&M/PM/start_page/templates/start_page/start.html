@@ -23,7 +23,7 @@
             <h4>Новые препараты</h4>
             <ul class="list-group">
                 {% for recent_synonym in recent_synonyms %}
-                <li class="list-group-item list-group-item-action list-group-item-primary"><a href="{% url 'start_page:search_param' recent_synonym.url_name %}">{{recent_synonym.comm_name}}</a></li>
+                <li class="list-group-item list-group-item-action list-group-item-primary"><a style="color: #3042a6" href="{% url 'start_page:search_param' recent_synonym.url_name %}">{{recent_synonym.comm_name}}</a></li>
                 {% endfor %}
             </ul>
         </div>
