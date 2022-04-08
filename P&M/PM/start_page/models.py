@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 from django.db import models
 
 
@@ -37,4 +37,14 @@ class General_sources(models.Model):
         ordering = ["source_name"]
     def __str__(self):
         return self.source_name
+
+class Request_counter(models.Model):
+    synonym = models.ForeignKey(Synonyms, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Синоним")
+    count = models.PositiveIntegerField(default=0, verbose_name="Число запросов")
+    date = models.DateTimeField(default=timezone.now, verbose_name="Дата запроса")
+    class Meta:
+        verbose_name_plural = "Запросы"
+        verbose_name = "Запрос"
+        ordering = ["date"]
+
 
