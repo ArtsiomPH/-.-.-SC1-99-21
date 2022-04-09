@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import Search
-from .models import Medcine, Synonyms, General_sources
+from .models import Medcine, Synonyms, Request_counter
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 
 
 def index(request):
@@ -14,11 +15,15 @@ def index(request):
 def search_medcine(request):
     medcine_name = request.GET.get("medcine_name")
     try:
-        result = Synonyms.objects.get(comm_name=medcine_name)
+        synonym = Synonyms.objects.get(comm_name=medcine_name)
     except Synonyms.DoesNotExist:
         return HttpResponseRedirect("/error")
     else:
-        return redirect("start_page:search_param", result.url_name)
+        view, created = synonym.request_counter_set.get_or_create(synonym=synonym.id, date=timezone.now())
+        view.count = view.count + 1
+        view.save(update_fields=["count"])
+        return redirect("start_page:search_param", synonym.url_name)
+
 
 def search_param(request, url_name):
     search = Search()
@@ -30,20 +35,21 @@ def search_param(request, url_name):
         medcine = Medcine.objects.get(synonyms__url_name=url_name)
         all_synonyms = medcine.synonyms_set.all().exclude(url_name=url_name)
         general_sources = medcine.general_sources_set.all()
-        data = {"search_form":search, "medcine":medcine, "synonym":result, "all_synonyms":all_synonyms, "sources":general_sources}
+        data = {"search_form": search, "medcine": medcine, "synonym": result, "all_synonyms": all_synonyms,
+                "sources": general_sources}
         return render(request, "start_page/search.html", context=data)
+
 
 def about(request):
     search = Search()
     return render(request, "start_page/about.html", {"search_form": search})
 
+
 def policy(request):
     search = Search()
     return render(request, "start_page/policy.html", {"search_form": search})
 
+
 def error(request):
     search = Search()
     return render(request, "start_page/not_in_base.html", {"search_form": search})
-
-
-
