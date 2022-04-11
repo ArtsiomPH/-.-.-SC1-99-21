@@ -12,11 +12,9 @@
         <div class="col-lg-4">
             <h4>Популярные препараты</h4>
             <ul class="list-group">
-                <li class="list-group-item list-group-item-action list-group-item-primary"><a>Ibuprofen</a></li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"><a>Paracetamol</a></li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"><a>Kreon</a></li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"><a>Renny</a></li>
-                <li class="list-group-item list-group-item-action list-group-item-primary"><a>Pimafucin</a></li>
+                {% for popular_medcine in popular_medcines %}
+                <li class="list-group-item list-group-item-action list-group-item-primary"><a style="color: #3042a6" href="{% url 'start_page:search_param' popular_medcine.url_name %}">{{popular_medcine.comm_name}}</a></li>
+                {% endfor %}
             </ul>
         </div>
         <div class="col-lg-4">

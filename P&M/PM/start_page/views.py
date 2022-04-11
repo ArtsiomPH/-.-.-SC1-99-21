@@ -1,14 +1,18 @@
 from django.shortcuts import render, redirect
 from .forms import Search
-from .models import Medcine, Synonyms, Request_counter
+from .models import Medcine, Synonyms
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.db.models import Sum
 
 
 def index(request):
     search = Search()
     recent_synonyms = Synonyms.objects.order_by("-pub_date")[:5]
-    data = {"search_form": search, "recent_synonyms": recent_synonyms}
+    request_range = timezone.now() - timezone.timedelta(days=7)
+    popular_medcines = Synonyms.objects.filter(request_counter__date__gt=request_range).annotate(
+        sm=Sum("request_counter__count")).order_by("-sm")[:5]
+    data = {"search_form": search, "recent_synonyms": recent_synonyms, "popular_medcines": popular_medcines}
     return render(request, "start_page/start.html", context=data)
 
 
