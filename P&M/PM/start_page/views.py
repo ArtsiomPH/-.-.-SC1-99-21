@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.db.models import Sum
 
 
+
 def index(request):
     search = Search()
     recent_synonyms = Synonyms.objects.order_by("-pub_date")[:5]
