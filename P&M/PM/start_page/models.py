@@ -45,7 +45,7 @@ class Request_counter(models.Model):
     class Meta:
         verbose_name_plural = "Запросы"
         verbose_name = "Запрос"
-        ordering = ["date"]
+        ordering = ["-date"]
     def __str__(self):
         return self.synonym.comm_name
 
