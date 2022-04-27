@@ -1,3 +1,8 @@
 Pipfile.lock
 db.sqlite3
-.DS_Store
+.DS_Store.DS_Store
+.ipynb_checkpoints
+.idea
+__pycache__
+.env
+db_data

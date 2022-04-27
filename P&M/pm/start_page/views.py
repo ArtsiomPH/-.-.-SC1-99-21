@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import Search
+from .forms import Search, Add_medcine, Add_synonyms, Add_literature
 from .models import Medcine, Synonyms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
-
-
+from django.views.generic.edit import CreateView, UpdateView
 
 def index(request):
     search = Search()
@@ -28,8 +27,6 @@ def search_medcine(request):
         view.count = view.count + 1
         view.save(update_fields=["count"])
         return redirect("start_page:search_param", synonym.url_name)
-
-
 def search_param(request, url_name):
     search = Search()
     try:
@@ -44,17 +41,50 @@ def search_param(request, url_name):
                 "sources": general_sources}
         return render(request, "start_page/search.html", context=data)
 
-
 def about(request):
     search = Search()
     return render(request, "start_page/about.html", {"search_form": search})
-
 
 def policy(request):
     search = Search()
     return render(request, "start_page/policy.html", {"search_form": search})
 
-
 def error(request):
     search = Search()
     return render(request, "start_page/not_in_base.html", {"search_form": search})
+
+def base(request):
+    return render(request, "start_page/base_operations.html")
+
+def add_tags(request):
+    synonyms = Synonyms.object.all()
+    data = []
+    for synonym in synonyms:
+        data.append(synonym.comm_name)
+    return JsonResponse(data, safe=False)
+
+
+
+def create_medcine(request):
+    add_medcine = Add_medcine()
+    if request.method == 'POST':
+        new_medcine = Add_medcine(request.POST)
+        if new_medcine.is_valid:
+            new_medcine.save()
+            medcine_object = new_medcine.cleaned_data['international_name']
+            medcine_object = Medcine.objects.get(international_name=medcine_object)
+            medcine_object.general_url_name = medcine_object.lower()
+            medcine_object.save()
+            return HttpResponseRedirect('/base')
+        else:
+            data = {'add_medcine': add_medcine}
+            return render(request, "start_page/create_base.html", context=data)
+    else:
+        data = {'add_medcine': add_medcine}
+        return render(request, "start_page/create_base.html", context=data)
+
+
+
+
+
+

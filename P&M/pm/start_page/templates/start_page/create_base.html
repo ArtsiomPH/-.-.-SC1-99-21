@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New medcine</title>
+</head>
+<body>
+<form method = "POST">
+{% csrf_token %}
+{{add_medcine.as_p}}
+<button type="submit">Сохранить</button>
+</form>
+</body>
+</html>

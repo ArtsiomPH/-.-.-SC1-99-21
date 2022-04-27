@@ -5,11 +5,11 @@ from .forms import Authorization
 
 
 class Auth(FormView):
-    template_name = 'edit_base/auth.html'
+    template_name = 'authentication/auth.html'
     form_class = Authorization
-    success_url = 'edit_base/edit'
+    success_url = 'authentication/edit'
 class Edit(TemplateView):
-    template_name = 'edit_base/edit'
+    template_name = 'authentication/edit'
 
 
 

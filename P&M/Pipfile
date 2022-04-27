@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 django = "==4"
+asgiref = "*"
+sqlparse = "*"
+uwsgi = "*"
+docker = "*"
+pip = "*"
 
 [dev-packages]
 
