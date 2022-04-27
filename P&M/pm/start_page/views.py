@@ -71,9 +71,9 @@ def create_medcine(request):
         new_medcine = Add_medcine(request.POST)
         if new_medcine.is_valid:
             new_medcine.save()
-            medcine_object = new_medcine.cleaned_data['international_name']
-            medcine_object = Medcine.objects.get(international_name=medcine_object)
-            medcine_object.general_url_name = medcine_object.lower()
+            medcine_name= new_medcine.cleaned_data['international_name']
+            medcine_object = Medcine.objects.get(international_name=medcine_name)
+            medcine_object.general_url_name = medcine_name.lower()
             medcine_object.save()
             return HttpResponseRedirect('/base')
         else:

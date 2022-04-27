@@ -68,17 +68,6 @@
 <script>
     $(function () {
         var availableTags = [];
-            // "Канефрон-Н",
-            // "Гамифрон",
-            // "Аспирин",
-            // "Ибуфен",
-            // "Эффералган",
-            // "Панадол",
-            // "Миг",
-            // "Ибупрофен-белмед",
-            // "Ибуфлекс",
-            // "Парацетамол"
-
         var url = {% url 'start_page:tags' %};
         $.getJSON(url, function (data) {
             $.each(data, function (index, value) {
