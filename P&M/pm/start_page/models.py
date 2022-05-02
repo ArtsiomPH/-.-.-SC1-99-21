@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.db import models
 
 
+
 class Medcine(models.Model):
     international_name = models.CharField(max_length=300, verbose_name="МНН")
     general_url_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Название для URL")

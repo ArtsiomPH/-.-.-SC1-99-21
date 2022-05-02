@@ -4,7 +4,8 @@ from .models import Medcine, Synonyms
 from django.http import HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
-from django.views.generic.edit import CreateView, UpdateView
+from django.contrib import messages
+from django.core.validators import ValidationError
 
 def index(request):
     search = Search()
@@ -66,20 +67,24 @@ def add_tags(request):
 
 
 def create_medcine(request):
-    add_medcine = Add_medcine()
     if request.method == 'POST':
         new_medcine = Add_medcine(request.POST)
-        if new_medcine.is_valid:
-            new_medcine.save()
-            medcine_name= new_medcine.cleaned_data['international_name']
-            medcine_object = Medcine.objects.get(international_name=medcine_name)
-            medcine_object.general_url_name = medcine_name.lower()
-            medcine_object.save()
-            return HttpResponseRedirect('/base')
+        if new_medcine.is_valid():
+            if not Medcine.objects.filter(international_name=request.POST.get('international_name')).exists():
+                new_medcine.save()
+                medcine_name = new_medcine.cleaned_data['international_name']
+                medcine_object = Medcine.objects.get(international_name=medcine_name)
+                medcine_object.general_url_name = medcine_name.lower()
+                medcine_object.save()
+                messages.add_message(request, messages.SUCCESS, "Запись добавлена")
+                return HttpResponseRedirect('/base')
+            else:
+                messages.add_message(request, messages.ERROR, f'Препарат {request.POST.get("international_name")} есть в базе данных')
+                return HttpResponseRedirect('/base/create')
         else:
-            data = {'add_medcine': add_medcine}
-            return render(request, "start_page/create_base.html", context=data)
+            return render(request, "start_page/create_base.html", {"add_medcine":new_medcine})
     else:
+        add_medcine = Add_medcine()
         data = {'add_medcine': add_medcine}
         return render(request, "start_page/create_base.html", context=data)
 

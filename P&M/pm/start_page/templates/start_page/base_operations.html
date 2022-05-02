@@ -5,7 +5,15 @@
   <title>Base</title>
 </head>
 <body>
-
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <p class="{{massage.tags}}">
+    {{ message|safe }}
+    </p>
+    {% endfor %}
+</div>
+{% endif %}
 <a href="{% url 'start_page:create'%}"><button type="submit">Добавить новый препарат</button></a>
 </form>
 </body>
