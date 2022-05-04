@@ -1,31 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>New medcine</title>
+    <meta charset="UTF-8">
+    <title>New medcine</title>
 </head>
 <body>
 {% if messages %}
 <div class="messages">
     {% for message in messages %}
     <p class="{{massage.tags}}">
-    {{ message|safe }}
+        {{ message|safe }}
     </p>
     {% endfor %}
 </div>
 {% endif %}
-<form method = "POST">
-{% csrf_token %}
-<fieldset>
-<legend>Ввод общей информации</legend>
-{% for field in add_medcine %}
-<p>{{field.label}}:</p>
-<p>{{field.help_text}}</p>
-<p>{{field}}</p>
-<p>{{field.errors}}</p>
-{% endfor %}
-</fieldset>
-<button type="submit">Сохранить</button>
+<form method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Ввод общей информации</legend>
+        {% for field in add_medcine %}
+        <p>{{field.label}}:</p>
+        <p>{{field.help_text}}</p>
+        <p>{{field}} {{field.errors}}</p>
+        {% endfor %}
+    </fieldset>
+    <fieldset>
+        <legend>Ввод синонимов</legend>
+        {{ add_synonyms.management_form }}
+        {% for forms in add_synonyms %}
+        <fieldset>
+            {% for fields in forms.visible_fields %}
+            <p>{{fields.label_tag}}</p>
+            <p>{{fields.help_text}}</p>
+            <p>{{fields}}</p>
+            <p>{{fields.errors}}</p>
+            {% endfor %}
+        </fieldset>
+        {% endfor %}
+    </fieldset>
+    <fieldset>
+        <legend>Ввод списка источников</legend>
+        {{add_sources.as_p}}
+    </fieldset>
+    <button type="submit">Сохранить</button>
+    <a href="{% url 'start_page:base' %}"><button type="button">На главную</button></a>
 </form>
 </body>
 </html>

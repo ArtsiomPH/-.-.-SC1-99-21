@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Medcine(models.Model):
-    international_name = models.CharField(max_length=300, verbose_name="МНН")
+    international_name = models.CharField(max_length=300, verbose_name="МНН", unique=True)
     general_url_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Название для URL")
     general_info = models.TextField(null=True, blank=True, verbose_name="Информация")
     pub_date = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True, verbose_name="Дата публикации")
@@ -18,7 +18,7 @@ class Medcine(models.Model):
 
 
 class Synonyms(models.Model):
-    medcine = models.ForeignKey(Medcine, on_delete=models.PROTECT, verbose_name="Международное наименование")
+    medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Международное наименование")
     comm_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Торговое наименование")
     url_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Название для URL")
     pub_date = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True, verbose_name="Дата публикации")
