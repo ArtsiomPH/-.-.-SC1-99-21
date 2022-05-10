@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medcines list</title>
+</head>
+<body>
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <p class="{{massage.tags}}">
+    {{ message|safe }}
+    </p>
+    {% endfor %}
+</div>
+{% endif %}
+{%for medcine in medcines%}
+<table>
+    <tr>
+        <td>{{medcine.international_name}}</td>
+        <td><a href="{% url 'start_page:update_medcine' medcine.general_url_name %}">Изменить</a>|<a href="{% url 'start_page:delete' medcine.pk %}">Удалить</a><td>
+    </tr>
+{%endfor%}
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+        {% endif %}
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<a href="{% url 'start_page:base' %}"><button type="submit">На главную</button></a>
+</body>
+</html>

@@ -21,7 +21,7 @@ class Synonyms(models.Model):
     medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Международное наименование")
     comm_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Торговое наименование")
     url_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Название для URL")
-    pub_date = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True, verbose_name="Дата публикации")
+    pub_date = models.DateTimeField(auto_now=True, null=True, blank=True, db_index=True, verbose_name="Дата публикации")
     class Meta:
         verbose_name_plural = "Синонимы"
         verbose_name = "Синоним"

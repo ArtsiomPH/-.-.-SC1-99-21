@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db.models import Sum
 from django.contrib import messages
 from django.forms import inlineformset_factory, ValidationError
-from django.views.generic.list import ListView
+from django.views.generic import ListView
 
 
 def index(request):
@@ -37,7 +37,7 @@ def search_param(request, url_name):
     try:
         result = Synonyms.objects.get(url_name=url_name)
     except Synonyms.DoesNotExist:
-        return HttpResponseRedirect("/error")
+        return redirect("start_page:error")
     else:
         medcine = Medcine.objects.get(synonyms__url_name=url_name)
         all_synonyms = medcine.synonyms_set.all().exclude(url_name=url_name)
@@ -99,7 +99,7 @@ def create_medcine(request):
                         if synonym.cleaned_data:
                             synonym.save()
                     messages.add_message(request, messages.SUCCESS, "Запись добавлена")
-                    return HttpResponseRedirect('/base')
+                    return redirect('start_page:base')
                 else:
                     medcine_object.delete()
                     add_medcine = Add_medcine(request.POST)
@@ -110,7 +110,7 @@ def create_medcine(request):
             else:
                 messages.add_message(request, messages.ERROR,
                                      f'Препарат {request.POST.get("international_name")} есть в базе данных')
-                return HttpResponseRedirect('/base/create')
+                return redirect('start_page:create')
         else:
             add_synonyms = SynonymsFormSet(request.POST)
             add_medcine = Add_medcine(request.POST)
@@ -166,7 +166,7 @@ def update_medcine(request, general_url_name):
                     # return render(request, "start_page/create_base.html", context=data)
             sources.save()
             messages.add_message(request, messages.SUCCESS, "Запись добавлена")
-            return HttpResponseRedirect('/base')
+            return HttpResponseRedirect('start_page:base')
 
         else:
             add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
@@ -180,3 +180,12 @@ def update_medcine(request, general_url_name):
         add_medcine = Add_medcine(instance=medcine_object)
         data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
         return render(request, "start_page/create_base.html", context=data)
+
+def delete_medcine(request, pk):
+    medcine = Medcine.objects.get(pk=pk)
+    medcine.delete()
+    messages.add_message(request, messages.SUCCESS, "Запись удалена")
+    return redirect('start_page:update')
+
+
+

@@ -4,6 +4,7 @@ from .views import Update_base
 
 app_name = "start_page"
 urlpatterns = [
+    path('base/delete/<int:pk>', views.delete_medcine, name='delete'),
     path('base/update/<str:general_url_name>', views.update_medcine, name='update_medcine'),
     path('base/update/', Update_base.as_view(), name='update'),
     path('base/create/', views.create_medcine, name='create'),
