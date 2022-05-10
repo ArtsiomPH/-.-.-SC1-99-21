@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib import messages
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, ValidationError
 from django.views.generic.list import ListView
 
 
@@ -30,6 +30,8 @@ def search_medcine(request):
         view.count = view.count + 1
         view.save(update_fields=["count"])
         return redirect("start_page:search_param", synonym.url_name)
+
+
 def search_param(request, url_name):
     search = Search()
     try:
@@ -44,20 +46,25 @@ def search_param(request, url_name):
                 "sources": general_sources}
         return render(request, "start_page/search.html", context=data)
 
+
 def about(request):
     search = Search()
     return render(request, "start_page/about.html", {"search_form": search})
+
 
 def policy(request):
     search = Search()
     return render(request, "start_page/policy.html", {"search_form": search})
 
+
 def error(request):
     search = Search()
     return render(request, "start_page/not_in_base.html", {"search_form": search})
 
+
 def base(request):
     return render(request, "start_page/base_operations.html")
+
 
 def add_tags(request):
     synonyms = Synonyms.object.all()
@@ -67,14 +74,13 @@ def add_tags(request):
     return JsonResponse(data, safe=False)
 
 
-
 def create_medcine(request):
-    #create synonym's form
+    # create synonym's form
     SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=False, extra=3)
-    #create literatures form
+    # create literatures form
     SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=False, extra=5)
     if request.method == 'POST':
-        #new medcine add
+        # new medcine add
         new_medcine = Add_medcine(request.POST)
         if new_medcine.is_valid():
             if not Medcine.objects.filter(international_name=request.POST.get('international_name')).exists():
@@ -102,7 +108,8 @@ def create_medcine(request):
                     data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
                     return render(request, "start_page/create_base.html", context=data)
             else:
-                messages.add_message(request, messages.ERROR, f'Препарат {request.POST.get("international_name")} есть в базе данных')
+                messages.add_message(request, messages.ERROR,
+                                     f'Препарат {request.POST.get("international_name")} есть в базе данных')
                 return HttpResponseRedirect('/base/create')
         else:
             add_synonyms = SynonymsFormSet(request.POST)
@@ -117,6 +124,7 @@ def create_medcine(request):
         data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
         return render(request, "start_page/create_base.html", context=data)
 
+
 class Update_base(ListView):
     template_name = "start_page/update_base.html"
     context_object_name = 'medcines'
@@ -130,18 +138,45 @@ class Update_base(ListView):
         context['general_url_name'] = Medcine.objects.all()
         return context
 
+
 def update_medcine(request, general_url_name):
-    medcine = Medcine.objects.get(general_url_name=general_url_name)
-    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True)
-    add_synonyms = SynonymsFormSet(instance=medcine)
-    SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True, extra=5)
-    add_sources = SourcesFormSet(instance=medcine)
-    add_medcine = Add_medcine(instance=medcine)
-    data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
-    return render(request, "start_page/create_base.html", context=data)
+    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True, extra=3)
+    SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True, extra=3)
+    medcine_object = Medcine.objects.get(general_url_name=general_url_name)
+    if request.method == 'POST':
+        # new medcine add
+        new_medcine = Add_medcine(request.POST, instance=medcine_object)
+        if new_medcine.is_valid():
+            new_medcine.save()
+            medcine_name = new_medcine.cleaned_data['international_name']
+            medcine_object.general_url_name = medcine_name.lower()
+            medcine_object.save()
+            medcine = Medcine.objects.get(international_name=medcine_name)
+            synonyms = SynonymsFormSet(request.POST, instance=medcine)
+            sources = SourcesFormSet(request.POST, instance=medcine)
+            if synonyms.is_valid():
+                if synonyms.cleaned_data:
+                    synonyms.save()
+            else:
+                raise ValidationError("Ouops")
+                    # add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
+                    # add_medcine = Add_medcine(request.POST, instance=medcine_object)
+                    # add_sources = SourcesFormSet(request.POST, instance=medcine_object)
+                    # data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
+                    # return render(request, "start_page/create_base.html", context=data)
+            sources.save()
+            messages.add_message(request, messages.SUCCESS, "Запись добавлена")
+            return HttpResponseRedirect('/base')
 
-
-
-
-
-
+        else:
+            add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
+            add_medcine = Add_medcine(request.POST, instance=medcine_object)
+            add_sources = SourcesFormSet(request.POST, instance=medcine_object)
+            data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
+            return render(request, "start_page/create_base.html", context=data)
+    else:
+        add_synonyms = SynonymsFormSet(instance=medcine_object)
+        add_sources = SourcesFormSet(instance=medcine_object)
+        add_medcine = Add_medcine(instance=medcine_object)
+        data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
+        return render(request, "start_page/create_base.html", context=data)

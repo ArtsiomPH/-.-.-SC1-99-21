@@ -27,20 +27,26 @@
     <fieldset>
         <legend>Ввод синонимов</legend>
         {{ add_synonyms.management_form }}
+        {{ add_synonyms.non_field_errors }}
         {% for forms in add_synonyms %}
         <fieldset>
             {% for fields in forms.visible_fields %}
             <p>{{fields.label_tag}}</p>
             <p>{{fields.help_text}}</p>
             <p>{{fields}}</p>
-            <p>{{fields.errors}}</p>
+            <p>{{errors}}</p>
             {% endfor %}
         </fieldset>
         {% endfor %}
     </fieldset>
     <fieldset>
         <legend>Ввод списка источников</legend>
-        {{add_sources.as_p}}
+        {{ add_sources.management_form }}
+        {% for field in add_sources %}
+            <p>{{field.label}}</p>
+            <p>{{field}}</p>
+            <p>{{field.errors}}</p>
+        {% endfor %}
     </fieldset>
     <button type="submit">Сохранить</button>
     <a href="{% url 'start_page:base' %}"><button type="button">На главную</button></a>

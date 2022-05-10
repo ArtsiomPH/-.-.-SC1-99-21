@@ -13,13 +13,13 @@ class Search(forms.Form):
 
 class Add_medcine(ModelForm):
     international_name = forms.CharField(max_length=40, label="МНН", required=True, validators=[RegexValidator(
-        regex='^[A-Z][a-z]+$'
+        regex='^[A-Z][a-z0-9 -]+$'
     )],
                                          error_messages={'invalid': 'Введите название латиницей с большой буквы', 'null': 'Поле обязательно для заполнения'},
                                          help_text="Ввод латиницей с большой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
 
     general_info = forms.CharField(min_length=10, label="Информация", required=True, validators=[RegexValidator(
-        regex='^[А-Я][а-яёА-Я0-9 .,!-]+$'
+        regex='[а-яёА-Я0-9 .,!-]+$'
     )],
                                    error_messages={'invalid': 'Введите информацию кирилицей', 'null': 'Поле обязательно для заполнения'},
                                    help_text="Ввод кириллицей с большой буквы", widget=forms.Textarea(attrs={'autocomplete': 'off'}))
@@ -34,14 +34,14 @@ class Add_medcine(ModelForm):
 
 class Add_synonyms(ModelForm):
     comm_name = forms.CharField(max_length=50, label="Торговое наименование", required=True, validators=[RegexValidator(regex='^[А-Я][а-яёА-я0-9 -]+$')], error_messages={'invalid': 'Введите название кирилицей с большой буквы'}, help_text="Ввод кирилицей с большой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-    url_name = forms.CharField(max_length=50, label="Наименование на английском", required=True, validators=[RegexValidator(regex='^[a-z][a-zA-z]+$')], error_messages={'invalid': 'Введите наименование латиницей с маленькой буквы'}, help_text="Ввод латиницей с маленькой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    url_name = forms.CharField(max_length=50, label="Наименование на английском", required=True, validators=[RegexValidator(regex='^[a-z][a-zA-z -]+$')], error_messages={'invalid': 'Введите наименование латиницей с маленькой буквы'}, help_text="Ввод латиницей с маленькой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     class Meta:
         model = Synonyms
         fields = ['comm_name', 'url_name']
 
 
 class Add_literature(ModelForm):
-    source_name = forms.CharField(min_length=10, label="Источник", required=True, widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    source_name = forms.CharField(min_length=10, label="Источник", required=True, widget=forms.TextInput(attrs={'autocomplete': 'off'}), error_messages={'blank': 'Поле обязательно для заполнения', 'min_length': 'Минимум 10 символов'})
     class Meta:
         model = General_sources
         fields = ['source_name']
