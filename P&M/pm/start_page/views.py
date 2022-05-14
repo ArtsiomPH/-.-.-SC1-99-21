@@ -7,6 +7,8 @@ from django.db.models import Sum
 from django.contrib import messages
 from django.forms import inlineformset_factory, ValidationError
 from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def index(request):
@@ -24,7 +26,7 @@ def search_medcine(request):
     try:
         synonym = Synonyms.objects.get(comm_name=medcine_name)
     except Synonyms.DoesNotExist:
-        return HttpResponseRedirect("/error")
+        return redirect("start_page:error")
     else:
         view, created = synonym.request_counter_set.get_or_create(synonym=synonym.id, date=timezone.now())
         view.count = view.count + 1
@@ -61,19 +63,19 @@ def error(request):
     search = Search()
     return render(request, "start_page/not_in_base.html", {"search_form": search})
 
-
+@login_required()
 def base(request):
     return render(request, "start_page/base_operations.html")
 
 
 def add_tags(request):
-    synonyms = Synonyms.object.all()
+    synonyms = Synonyms.objects.all()
     data = []
     for synonym in synonyms:
         data.append(synonym.comm_name)
     return JsonResponse(data, safe=False)
 
-
+@login_required()
 def create_medcine(request):
     # create synonym's form
     SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=False, extra=3)
@@ -125,7 +127,7 @@ def create_medcine(request):
         return render(request, "start_page/create_base.html", context=data)
 
 
-class Update_base(ListView):
+class Update_base(LoginRequiredMixin, ListView):
     template_name = "start_page/update_base.html"
     context_object_name = 'medcines'
     queryset = Medcine.objects.all()
@@ -138,7 +140,7 @@ class Update_base(ListView):
         context['general_url_name'] = Medcine.objects.all()
         return context
 
-
+@login_required()
 def update_medcine(request, general_url_name):
     SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True, extra=3)
     SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True, extra=3)
@@ -180,7 +182,7 @@ def update_medcine(request, general_url_name):
         add_medcine = Add_medcine(instance=medcine_object)
         data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
         return render(request, "start_page/create_base.html", context=data)
-
+@login_required()
 def delete_medcine(request, pk):
     medcine = Medcine.objects.get(pk=pk)
     medcine.delete()

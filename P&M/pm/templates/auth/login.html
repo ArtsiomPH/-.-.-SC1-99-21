@@ -6,7 +6,7 @@
 </head>
 <body>
 {% if user.is_authenticated %}
-<p>Здравствуйте {{user.username}}! Вы вошли в базу данных</p>
+<p>Здравствуйте {{user.username}}! Вы вошли в базу данных.</p>
 <a href="{% url 'authentication:password_change' %}"><button type="submit" value="password_change">Сменить пароль</button></a>
 <a href="{% url 'start_page:base' %}"><button type="submit" value="logout">Редактировать базу данных</button></a>
 <a href="{% url 'authentication:logout' %}"><button type="submit" value="logout">Выйти</button></a>
@@ -18,7 +18,7 @@
     <input type="hidden" name="next" value="{{next}}">
     <input type="submit" value="Войти">
 </form>
-
+    <a href="{% url 'authentication:password_reset' %}"><input type="submit" value="Восстановить пароль"></a>
 {% endif %}
 </body>
 </html>

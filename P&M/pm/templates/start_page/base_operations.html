@@ -14,8 +14,9 @@
     {% endfor %}
 </div>
 {% endif %}
-<a href="{% url 'start_page:create'%}"><button type="submit">Добавить новый препарат</button></a>
-<a href="{% url 'start_page:update'%}"><button type="submit">Обновить информацию</button></a>
+<a href="{% url 'start_page:create' %}"><button type="submit">Добавить новый препарат</button></a>
+<a href="{% url 'start_page:update' %}"><button type="submit">Обновить информацию</button></a>
+<a href="{% url 'authentication:logout' %}"><button type="submit">Выйти</button></a>
 </form>
 </body>
 </html>

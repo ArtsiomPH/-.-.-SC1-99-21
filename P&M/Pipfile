@@ -10,6 +10,8 @@ sqlparse = "*"
 uwsgi = "*"
 docker = "*"
 pip = "*"
+postgres = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

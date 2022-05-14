@@ -2,8 +2,7 @@ version: '3.10'
 
 services:
   app:
-    build:
-      context: .
+    image: "artsiomph/pm_app"
     restart: always
     ports:
       - "8000:8000"

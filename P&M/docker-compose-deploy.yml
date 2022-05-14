@@ -7,7 +7,7 @@ services:
     volumes:
       - static_data:/vol/web
     environment:
-      - SECRET_KEY=django-insecure-=(9g_65x**tzds^oyw+zf_(t!p112cop0k(b8c#tgxj%ok06sp
+      - SECRET_KEY=zMSmyKrbOwBSQ7p1B5c9fJh9d5zmawR
       - ALLOWED_HOSTS=127.0.0.1,localhost
       - DEBUG=1
   proxy:
