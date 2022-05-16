@@ -11,7 +11,7 @@ class MedcineAdmin(admin.ModelAdmin):
 
 @admin.register(Synonyms)
 class SynonymsAdmin(admin.ModelAdmin):
-    list_display = ["comm_name", "url_name", "medcine", "pub_date"]
+    list_display = ["comm_name", "url_name", "medcine", "pub_date", "id"]
     list_display_links = ["comm_name"]
     search_fields = ["comm_name", "medcine__international_name"]
 

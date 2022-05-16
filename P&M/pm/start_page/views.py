@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from .forms import Search, Add_medcine, Add_synonyms, Add_literature
 from .models import Medcine, Synonyms, General_sources
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib import messages
-from django.forms import inlineformset_factory, ValidationError
+from django.forms import inlineformset_factory
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -142,8 +142,8 @@ class Update_base(LoginRequiredMixin, ListView):
 
 @login_required()
 def update_medcine(request, general_url_name):
-    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True, extra=3)
-    SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True, extra=3)
+    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True)
+    SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True)
     medcine_object = Medcine.objects.get(general_url_name=general_url_name)
     if request.method == 'POST':
         # new medcine add
@@ -152,24 +152,24 @@ def update_medcine(request, general_url_name):
             new_medcine.save()
             medcine_name = new_medcine.cleaned_data['international_name']
             medcine_object.general_url_name = medcine_name.lower()
-            medcine_object.save()
-            medcine = Medcine.objects.get(international_name=medcine_name)
-            synonyms = SynonymsFormSet(request.POST, instance=medcine)
-            sources = SourcesFormSet(request.POST, instance=medcine)
-            if synonyms.is_valid():
-                if synonyms.cleaned_data:
-                    synonyms.save()
+            synonyms_formset = SynonymsFormSet(request.POST, instance=medcine_object)
+            sources_formset = SourcesFormSet(request.POST, instance=medcine_object)
+            if sources_formset.is_valid() and synonyms_formset.is_valid():
+                for source in sources_formset:
+                    if source.cleaned_data:
+                       source.save()
+                for synonym in synonyms_formset:
+                    if synonym.cleaned_data:
+                       synonym.save()
+                medcine_object.save()
+                messages.add_message(request, messages.SUCCESS, "Запись обновлена")
+                return redirect('start_page:base')
             else:
-                raise ValidationError("Ouops")
-                    # add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
-                    # add_medcine = Add_medcine(request.POST, instance=medcine_object)
-                    # add_sources = SourcesFormSet(request.POST, instance=medcine_object)
-                    # data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
-                    # return render(request, "start_page/create_base.html", context=data)
-            sources.save()
-            messages.add_message(request, messages.SUCCESS, "Запись добавлена")
-            return HttpResponseRedirect('start_page:base')
-
+                add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
+                add_medcine = Add_medcine(request.POST, instance=medcine_object)
+                add_sources = SourcesFormSet(request.POST, instance=medcine_object)
+                data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
+                return render(request, "start_page/create_base.html", context=data)
         else:
             add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
             add_medcine = Add_medcine(request.POST, instance=medcine_object)
@@ -182,6 +182,7 @@ def update_medcine(request, general_url_name):
         add_medcine = Add_medcine(instance=medcine_object)
         data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
         return render(request, "start_page/create_base.html", context=data)
+
 @login_required()
 def delete_medcine(request, pk):
     medcine = Medcine.objects.get(pk=pk)

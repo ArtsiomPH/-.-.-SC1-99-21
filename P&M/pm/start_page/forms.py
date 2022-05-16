@@ -33,11 +33,11 @@ class Add_medcine(ModelForm):
 
 
 class Add_synonyms(ModelForm):
-    comm_name = forms.CharField(max_length=50, label="Торговое наименование", required=True, validators=[RegexValidator(regex='^[А-Я][а-яёА-я0-9 -]+$')], error_messages={'invalid': 'Введите название кирилицей с большой буквы'}, help_text="Ввод кирилицей с большой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-    url_name = forms.CharField(max_length=50, label="Наименование на английском", required=True, validators=[RegexValidator(regex='^[a-z][a-zA-z -]+$')], error_messages={'invalid': 'Введите наименование латиницей с маленькой буквы'}, help_text="Ввод латиницей с маленькой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    comm_name = forms.CharField(max_length=50, label="Торговое наименование", validators=[RegexValidator(regex='^[А-Я][а-яёА-я0-9 -]+$')], error_messages={'invalid': 'Введите название кирилицей с большой буквы'}, help_text="Ввод кирилицей с большой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    url_name = forms.CharField(max_length=50, label="Наименование на английском", validators=[RegexValidator(regex='^[a-z][a-zA-z -]+$')], error_messages={'invalid': 'Введите наименование латиницей с маленькой буквы'}, help_text="Ввод латиницей с маленькой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     class Meta:
         model = Synonyms
-        fields = ['comm_name', 'url_name']
+        exclude = ['pub_date', 'medcine', 'id']
 
 
 class Add_literature(ModelForm):
