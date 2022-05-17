@@ -1,50 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>New medcine</title>
-</head>
-<body>
+{% extends 'auth/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}База данных{%endblock title%}
+{% block body %}
 {% if messages %}
-<div class="messages">
-    {% for message in messages %}
-    <p>
-        {{ message|safe }}
-    </p>
+{% for message in messages %}
+<div class="container">
+    <div class="container-fluid p-0">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            {{ message }}
+        </div>
+    </div>
     {% endfor %}
-</div>
-{% endif %}
-<form method="POST">
-    {% csrf_token %}
-    <fieldset>
-        <legend>Ввод общей информации</legend>
-        {% for field in add_medcine %}
-        <p>{{field.label}}:</p>
-        <p>{{field.help_text}}</p>
-        <p>{{field}}</p>
-        {% if field.errors %}
-        <ul>
-            {% for error in field.errors %}
-            <li>{{error}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endfor %}
-    </fieldset>
-    <fieldset>
-        <legend>Ввод синонимов</legend>
-        {{ add_synonyms.management_form }}
-        {% if add_synonyms.none_field_errors %}
-        <ul>
-            {% for error in add_synonyms.none_field_errors %}
-            <li>{{error}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% for forms in add_synonyms %}
-        <fieldset>
+    {% endif %}
+    <form method="POST">
+        <div class="container">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Ввод общей информации</legend>
+                {% for field in add_medcine %}
+                <!--                <p>{{field.label}}:</p>-->
+                <!--                <p>{{field.help_text}}</p>-->
+                <p>{{field|as_crispy_field}}</p>
+                <!--                {% if field.errors %}-->
+                <!--                <ul>-->
+                <!--                    {% for error in field.errors %}-->
+                <!--                    <li>{{error}}</li>-->
+                <!--                    {% endfor %}-->
+                <!--                </ul>-->
+                <!--                {% endif %}-->
+                {% endfor %}
+            </fieldset>
+        </div>
+        <div class="container">
+            <legend>Ввод синонимов</legend>
+            {{ add_synonyms.management_form }}
+            {% if add_synonyms.none_field_errors %}
+            <ul>
+                {% for error in add_synonyms.none_field_errors %}
+                <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% for forms in add_synonyms %}
+
             {% for hidden in forms.hidden_fields %}
-                {{hidden}}
+            {{hidden}}
             {% endfor %}
             {% if forms.none_field_errors %}
             <ul>
@@ -54,56 +54,57 @@
             </ul>
             {% endif %}
             {% for fields in forms.visible_fields %}
-            <p>{{fields.label_tag}}</p>
-            <p>{{fields.help_text}}</p>
-            <p>{{fields}}</p>
-            {% if fields.errors %}
-            <ul>
-                {% for error in fields.errors %}
-                <li>{{error}}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+            <!--                    <p>{{fields.label_tag}}</p>-->
+            <!--                    <p>{{fields.help_text}}</p>-->
+            <p>{{fields|as_crispy_field}}</p>
+            <!--                    {% if fields.errors %}-->
+            <!--                    <ul>-->
+            <!--                        {% for error in fields.errors %}-->
+            <!--                        <li>{{error}}</li>-->
+            <!--                        {% endfor %}-->
+            <!--                    </ul>-->
+            <!--                    {% endif %}-->
             {% endfor %}
-        </fieldset>
-        {% endfor %}
-    </fieldset>
-
-    <fieldset>
-        <legend>Ввод источников</legend>
-        {{ add_sources.management_form }}
-        {% if add_sources.none_field_errors %}
-            {% for error in add_sources.none_field_errors %}
+            {% endfor %}
+        </div>
+        <div class="container">
+            <fieldset>
+                <legend>Ввод источников</legend>
+                {{ add_sources.management_form }}
+                {% if add_sources.none_field_errors %}
+                {% for error in add_sources.none_field_errors %}
                 {{error}}
-            {% endfor %}
-        {% endif %}
-        {% for forms in add_sources %}
-        <fieldset>
-            {% for hidden in forms.hidden_fields %}
+                {% endfor %}
+                {% endif %}
+                {% for forms in add_sources %}
+                {% for hidden in forms.hidden_fields %}
                 {{hidden}}
-            {% endfor %}
-            {% if forms.none_field_errors %}
+                {% endfor %}
+                {% if forms.none_field_errors %}
                 {% for error in forms.none_field_errors %}
-                    {{error}}
+                {{error}}
                 {% endfor %}
-            {% endif %}
-            {% for field in forms.visible_fields %}
-                {{field.label_tag}}
-                {{field.help_text}}
-                {{field}}
-            {% if field.errors %}
-            <ul>
-                {% for error in field.errors %}
-                <li>{{error}}</li>
+                {% endif %}
+                {% for field in forms.visible_fields %}
+                <!--                    {{field.label_tag}}-->
+                <!--                    {{field.help_text}}-->
+                {{field|as_crispy_field}}
+                <!--                    {% if field.errors %}-->
+                <!--                    <ul>-->
+                <!--                        {% for error in field.errors %}-->
+                <!--                        <li>{{error}}</li>-->
+                <!--                        {% endfor %}-->
+                <!--                    </ul>-->
+                <!--                    {% endif %}-->
                 {% endfor %}
-            </ul>
-            {% endif %}
-            {% endfor %}
-        </fieldset>
-        {% endfor %}
-    </fieldset>
-    <button type="submit">Сохранить</button>
-    <a href="{% url 'start_page:base' %}"><button type="button">На главную</button></a>
-</form>
-</body>
-</html>
+                {% endfor %}
+            </fieldset>
+            <br>
+            <button class="btn btn-success" type="submit">Сохранить</button>
+            <a href="{% url 'start_page:base' %}">
+                <button class="btn btn-secondary" type="button">На главную</button>
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock body %}

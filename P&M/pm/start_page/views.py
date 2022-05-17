@@ -78,7 +78,7 @@ def add_tags(request):
 @login_required()
 def create_medcine(request):
     # create synonym's form
-    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=False, extra=3)
+    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=False, extra=2)
     # create literatures form
     SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=False, extra=5)
     if request.method == 'POST':
@@ -142,8 +142,8 @@ class Update_base(LoginRequiredMixin, ListView):
 
 @login_required()
 def update_medcine(request, general_url_name):
-    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True)
-    SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True)
+    SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True, extra=2)
+    SourcesFormSet = inlineformset_factory(Medcine, General_sources, form=Add_literature, can_delete=True, extra=5)
     medcine_object = Medcine.objects.get(general_url_name=general_url_name)
     if request.method == 'POST':
         # new medcine add
@@ -163,7 +163,7 @@ def update_medcine(request, general_url_name):
                        synonym.save()
                 medcine_object.save()
                 messages.add_message(request, messages.SUCCESS, "Запись обновлена")
-                return redirect('start_page:base')
+                return redirect('start_page:update')
             else:
                 add_synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
                 add_medcine = Add_medcine(request.POST, instance=medcine_object)
@@ -187,7 +187,7 @@ def update_medcine(request, general_url_name):
 def delete_medcine(request, pk):
     medcine = Medcine.objects.get(pk=pk)
     medcine.delete()
-    messages.add_message(request, messages.SUCCESS, "Запись удалена")
+    messages.add_message(request, messages.INFO, "Запись удалена")
     return redirect('start_page:update')
 
 

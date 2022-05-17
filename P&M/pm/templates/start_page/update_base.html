@@ -4,46 +4,53 @@
 {% block body %}
 {% if messages %}
 {% for message in messages %}
-<div class="container-fluid p-0">
-  <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-    {{ message }}
-  </div>
-</div>
-{% endfor %}
-{% endif %}
 <div class="container">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="nav-link" href="{% url 'start_page:base' %}">На главную</a>
+    <div class="container-fluid p-0">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            {{ message }}
+        </div>
     </div>
-  </nav>
-<br>
-<ul class="list-group list-group-numbered justify-content-center">
-{%for medcine in medcines%}
-  <li class="list-group-item">
-    {{medcine.international_name}}
-    <a href="{% url 'start_page:update_medcine' medcine.general_url_name %}"><button type="button" class="btn btn-outline-info">Изменить</button></a>
-      <a href="{% url 'start_page:delete' medcine.pk %}"><button type="button" class="btn btn-outline-danger">Удалить</button></a>
-  </li>
-{% endfor %}
-<br>
-</ul>
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="true">Предыдущая</a>
-        </li>
-        {% endif %}
-        {% for page_obj in page_obj.paginator %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+    {% endfor %}
+    {% endif %}
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="nav-link" href="{% url 'start_page:base' %}">На главную</a>
+            </div>
+        </nav>
+    </div>
+    <br>
+    <div class="container">
+        <ul class="list-group list-group-numbered justify-content-center">
+            {%for medcine in medcines%}
+            <li class="list-group-item">
+                {{medcine.international_name}}
+                <a href="{% url 'start_page:update_medcine' medcine.general_url_name %}">
+                    <button type="button" class="btn btn-outline-info">Изменить</button></a>
+                <a href="{% url 'start_page:delete' medcine.pk %}">
+                    <button type="button" class="btn btn-outline-danger">Удалить</button></a>
+            </li>
         {% endfor %}
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
+        </ul>
+    </div>
+    <br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1"
+                   aria-disabled="true">Предыдущая</a>
+            </li>
+            {% endif %}
+            {% for page_obj in page_obj.paginator %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
 {% endblock body %}
