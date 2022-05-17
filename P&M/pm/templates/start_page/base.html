@@ -15,7 +15,6 @@
             color: #B4B8B6;
             font-style: italic;
         }
-
     </style>
 </head>
 <body>
@@ -23,7 +22,7 @@
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #F5DFC3; border-radius: 5px">
         <div class="container-fluid">
             <div class="col-sm-12 col-md-5 col-lg-7">
-                <a href="/" class="navbar-brand mb-0" style="font-size: x-large">Pregnancy and medicines</a>
+                <a href="/" class="navbar-brand mb-0" style="font-size: x-large">Pregnancy and medicine</a>
             </div>
             <div class="col-sm-12 col-md-7 col-lg-5 ui-widget">
                 <form class="d-flex" method="get" autocomplete="off" action="{% url 'start_page:search' %}">
@@ -65,7 +64,6 @@
 <script src="https://cdn.jsdelivr.net/parallax.js/1.4.2/parallax.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-
 <script>
     $(function () {
         var availableTags = [];
@@ -78,7 +76,7 @@
         $("#search").autocomplete({
             source: availableTags
         });
-        $( "#search" ).autocomplete({
+        $("#search").autocomplete({
             minLength: 2
         });
     });

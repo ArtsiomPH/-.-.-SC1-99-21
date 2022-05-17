@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import Search, Add_medcine, Add_synonyms, Add_literature
 from .models import Medcine, Synonyms, General_sources
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib import messages
@@ -24,7 +24,7 @@ def index(request):
 def search_medcine(request):
     medcine_name = request.GET.get("medcine_name")
     try:
-        synonym = Synonyms.objects.get(comm_name=medcine_name)
+        synonym = Synonyms.objects.get(comm_name=medcine_name.capitalize())
     except Synonyms.DoesNotExist:
         return redirect("start_page:error")
     else:
@@ -67,7 +67,7 @@ def error(request):
 def base(request):
     return render(request, "start_page/base_operations.html")
 
-
+@login_required()
 def add_tags(request):
     synonyms = Synonyms.objects.all()
     data = []
@@ -131,7 +131,7 @@ class Update_base(LoginRequiredMixin, ListView):
     template_name = "start_page/update_base.html"
     context_object_name = 'medcines'
     queryset = Medcine.objects.all()
-    paginate_by = 20
+    paginate_by = 15
     page_kwarg = 'page'
 
     def get_context_data(self, **kwargs):

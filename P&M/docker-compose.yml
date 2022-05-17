@@ -24,10 +24,7 @@ services:
       - POSTGRES_DB=pm
       - EMAIL_HOST_USER=grodnopythonclassdemo@gmail.com
       - EMAIL_HOST_PASSWORD=faqcY5-taqses-gofcib
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
+
 
 volumes:
   postgres_data:

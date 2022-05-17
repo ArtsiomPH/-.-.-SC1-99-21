@@ -12,6 +12,8 @@ docker = "*"
 pip = "*"
 postgres = "*"
 psycopg2-binary = "*"
+django-bootstrap4 = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 
