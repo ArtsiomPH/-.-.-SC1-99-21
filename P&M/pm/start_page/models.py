@@ -32,7 +32,7 @@ class Synonyms(models.Model):
 
 class General_sources(models.Model):
     medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, null=True, blank=True, verbose_name="МНН")
-    source_name = models.CharField(max_length=300, null=True, blank=True, verbose_name="Название источника")
+    source_name = models.CharField(max_length=500, null=True, blank=True, verbose_name="Название источника")
     class Meta:
         verbose_name_plural = "Источники"
         verbose_name = "Источник"

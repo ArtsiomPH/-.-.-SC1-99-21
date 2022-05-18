@@ -5,15 +5,15 @@ from django.core.validators import RegexValidator
 
 
 class Search(forms.Form):
-    medcine_name = forms.CharField(max_length=40,
+    medcine_name = forms.CharField(max_length=40, min_length=3,
                                    widget=forms.TextInput(attrs={'class': 'form-control me-5',
                                                                  'placeholder': 'Введите название препарата',
                                                                  'id': 'search'}), label="")
 
 
 class Add_medcine(ModelForm):
-    international_name = forms.CharField(max_length=40, label="МНН", required=True, validators=[RegexValidator(
-        regex='^[A-Z][a-z0-9 -]+$'
+    international_name = forms.CharField(max_length=300, label="МНН", required=True, validators=[RegexValidator(
+        regex='^[A-Z][a-z0-9 ,-]+$'
     )],
                                          error_messages={'invalid': 'Введите название латиницей с большой буквы', 'null': 'Поле обязательно для заполнения'},
                                          help_text="Ввод латиницей с большой буквы", widget=forms.TextInput(attrs={'autocomplete': 'off'}))

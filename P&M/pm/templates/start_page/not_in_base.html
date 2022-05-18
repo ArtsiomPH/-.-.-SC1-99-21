@@ -1,7 +1,10 @@
 {% extends 'start_page/base.html' %}
-
 {% block form %}{{search_form}}{% endblock form %}
 {% block title %}Error{% endblock title %}
 {% block body_content %}
-<p>Препарата {{search_name}} нет в базе данных</p>
+<div class="container h4 align-items-center justify-content-center align-self-center">
+    <div class="row border rounded-3 text-center">
+    <p>Препарата "{{search_name}}" нет в базе данных.</p>
+    </div>
+</div>
 {% endblock body_content %}

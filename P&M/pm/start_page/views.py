@@ -22,11 +22,12 @@ def index(request):
 
 
 def search_medcine(request):
+    search = Search()
     medcine_name = request.GET.get("medcine_name")
     try:
         synonym = Synonyms.objects.get(comm_name=medcine_name.capitalize())
     except Synonyms.DoesNotExist:
-        return redirect("start_page:error")
+        return render(request, "start_page/not_in_base.html", context={'search_name': medcine_name, 'search_form': search})
     else:
         view, created = synonym.request_counter_set.get_or_create(synonym=synonym.id, date=timezone.now())
         view.count = view.count + 1
