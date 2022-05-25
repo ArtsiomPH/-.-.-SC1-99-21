@@ -7,8 +7,7 @@ from django.core.validators import RegexValidator
 class Search(forms.Form):
     medcine_name = forms.CharField(max_length=40, min_length=3,
                                    widget=forms.TextInput(attrs={'class': 'form-control me-5',
-                                                                 'placeholder': 'Введите название препарата',
-                                                                 'id': 'search'}), label="")
+                                                                 'placeholder': 'Введите название препарата', "id": "search"}), label="")
 
 
 class Add_medcine(ModelForm):
@@ -25,6 +24,7 @@ class Add_medcine(ModelForm):
                                    help_text="Ввод кириллицей с большой буквы", widget=forms.Textarea(attrs={'autocomplete': 'off'}))
 
     general_documentation = forms.URLField(required=True, label='Ссылка на документацию', widget=forms.URLInput(attrs={'placeholder': 'https://example.com', 'autocomplete': 'off'}), error_messages={'invalid': 'Введите ссылку в нужном формате'})
+    formula = forms.ImageField(label='Химическая формула')
 
     class Meta:
         model = Medcine

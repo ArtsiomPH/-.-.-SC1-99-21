@@ -69,13 +69,30 @@
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script>
     $(function () {
-        var availableTags = [];
-        var url = {% url 'start_page:tags' %};
-        $.getJSON(url, function (data) {
-            $.each(data, function (index, value) {
-                availableTags.append(value);
-            });
-        });
+        var availableTags = ["Панадол",
+            "Цефекон",
+            "Эффералган",
+            "Алка-зельтцер",
+            "Аспирин",
+            "Ацетилсалициловая кислота",
+            "Ренни",
+            "Рэникзон",
+            "Гамифрон",
+            "Канефрон",
+            "Вольтарен",
+            "Диклофенак",
+            "Ибуфен",
+            "Ибуфлекс",
+            "Миг",
+            "Депакин",
+            "Энкорат"
+        ];
+        // var url = "{% url 'start_page:tags' %}";
+        // $.getJSON(url, function (data) {
+        //     $.each(data, function (index, value) {
+        //         availableTags.append(value);
+        //     });
+        // });
         $("#search").autocomplete({
             source: availableTags
         });

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import Search, Add_medcine, Add_synonyms, Add_literature
 from .models import Medcine, Synonyms, General_sources
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib import messages
@@ -20,7 +20,6 @@ def index(request):
     data = {"search_form": search, "recent_synonyms": recent_synonyms, "popular_medcines": popular_medcines}
     return render(request, "start_page/start.html", context=data)
 
-
 def search_medcine(request):
     search = Search()
     medcine_name = request.GET.get("medcine_name")
@@ -33,7 +32,6 @@ def search_medcine(request):
         view.count = view.count + 1
         view.save(update_fields=["count"])
         return redirect("start_page:search_param", synonym.url_name)
-
 
 def search_param(request, url_name):
     search = Search()
@@ -49,16 +47,13 @@ def search_param(request, url_name):
                 "sources": general_sources}
         return render(request, "start_page/search.html", context=data)
 
-
 def about(request):
     search = Search()
     return render(request, "start_page/about.html", {"search_form": search})
 
-
 def policy(request):
     search = Search()
     return render(request, "start_page/policy.html", {"search_form": search})
-
 
 def error(request):
     search = Search()
@@ -90,7 +85,7 @@ def create_medcine(request):
                 new_medcine.save()
                 medcine_name = new_medcine.cleaned_data['international_name']
                 medcine_object = Medcine.objects.get(international_name=medcine_name)
-                medcine_object.general_url_name = medcine_name.lower()
+                medcine_object.general_url_name = medcine_name.lower().replace(" ","")[:8]
                 medcine_object.save()
                 synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
                 sources = SourcesFormSet(request.POST, instance=medcine_object)
@@ -152,13 +147,13 @@ def update_medcine(request, general_url_name):
         if new_medcine.is_valid():
             new_medcine.save()
             medcine_name = new_medcine.cleaned_data['international_name']
-            medcine_object.general_url_name = medcine_name.lower()
+            medcine_object.general_url_name = medcine_name.lower().replace(" ", "")[:8]
             synonyms_formset = SynonymsFormSet(request.POST, instance=medcine_object)
             sources_formset = SourcesFormSet(request.POST, instance=medcine_object)
             if sources_formset.is_valid() and synonyms_formset.is_valid():
                 for source in sources_formset:
                     if source.cleaned_data:
-                       source.save()
+                        source.save()
                 for synonym in synonyms_formset:
                     if synonym.cleaned_data:
                        synonym.save()
@@ -190,6 +185,8 @@ def delete_medcine(request, pk):
     medcine.delete()
     messages.add_message(request, messages.INFO, "Запись удалена")
     return redirect('start_page:update')
+
+
 
 
 
