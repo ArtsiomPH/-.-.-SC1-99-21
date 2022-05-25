@@ -6,12 +6,12 @@ from django.urls import reverse
 
 class Medcine(models.Model):
     international_name = models.CharField(max_length=300, verbose_name="МНН", unique=True)
-    general_url_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Название для URL")
-    general_info = models.TextField(null=True, blank=True, verbose_name="Информация")
+    general_url_name = models.CharField(max_length=50, unique=True, verbose_name="Название для URL")
+    general_info = models.TextField(blank=True, verbose_name="Информация")
     formula = models.ImageField(upload_to="formulas/%Y/%m/%d", blank=True, verbose_name="Химическая формула")
-    pub_date = models.DateTimeField(auto_now_add=True, db_index=True, null=True, verbose_name="Дата публикации")
+    pub_date = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Дата публикации")
     pub_update = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Дата изменения")
-    general_documentation = models.URLField(blank=True, null=True, verbose_name="Ссылка на документацию")
+    general_documentation = models.URLField(blank=True, verbose_name="Ссылка на документацию")
 
     class Meta:
         verbose_name_plural = "Препараты"
@@ -24,9 +24,9 @@ class Medcine(models.Model):
 
 class Synonyms(models.Model):
     medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, verbose_name="Международное наименование")
-    comm_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Торговое наименование")
-    url_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Название для URL")
-    pub_date = models.DateTimeField(auto_now_add=True, db_index=True, null=True, verbose_name="Дата публикации")
+    comm_name = models.CharField(max_length=50, unique=True, blank=False, verbose_name="Торговое наименование")
+    url_name = models.CharField(max_length=50, blank=False, verbose_name="Название для URL")
+    pub_date = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Дата публикации")
     pub_update = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Дата обновления")
 
     class Meta:
@@ -42,7 +42,7 @@ class Synonyms(models.Model):
 
 class General_sources(models.Model):
     medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, verbose_name="МНН")
-    source_name = models.CharField(max_length=500, null=True, blank=True, verbose_name="Название источника")
+    source_name = models.CharField(max_length=500, blank=True, verbose_name="Название источника")
 
     class Meta:
         verbose_name_plural = "Источники"

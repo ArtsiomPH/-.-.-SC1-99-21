@@ -20,18 +20,21 @@ def index(request):
     data = {"search_form": search, "recent_synonyms": recent_synonyms, "popular_medcines": popular_medcines}
     return render(request, "start_page/start.html", context=data)
 
+
 def search_medcine(request):
     search = Search()
     medcine_name = request.GET.get("medcine_name")
     try:
         synonym = Synonyms.objects.get(comm_name=medcine_name.capitalize())
     except Synonyms.DoesNotExist:
-        return render(request, "start_page/not_in_base.html", context={'search_name': medcine_name, 'search_form': search})
+        return render(request, "start_page/not_in_base.html",
+                      context={'search_name': medcine_name, 'search_form': search})
     else:
         view, created = synonym.request_counter_set.get_or_create(synonym=synonym.id, date=timezone.now())
         view.count = view.count + 1
         view.save(update_fields=["count"])
         return redirect("start_page:search_param", synonym.url_name)
+
 
 def search_param(request, url_name):
     search = Search()
@@ -47,21 +50,26 @@ def search_param(request, url_name):
                 "sources": general_sources}
         return render(request, "start_page/search.html", context=data)
 
+
 def about(request):
     search = Search()
     return render(request, "start_page/about.html", {"search_form": search})
+
 
 def policy(request):
     search = Search()
     return render(request, "start_page/policy.html", {"search_form": search})
 
+
 def error(request):
     search = Search()
     return render(request, "start_page/not_in_base.html", {"search_form": search})
 
+
 @login_required()
 def base(request):
     return render(request, "start_page/base_operations.html")
+
 
 @login_required()
 def add_tags(request):
@@ -70,6 +78,7 @@ def add_tags(request):
     for synonym in synonyms:
         data.append(synonym.comm_name)
     return JsonResponse(data, safe=False)
+
 
 @login_required()
 def create_medcine(request):
@@ -85,7 +94,7 @@ def create_medcine(request):
                 new_medcine.save()
                 medcine_name = new_medcine.cleaned_data['international_name']
                 medcine_object = Medcine.objects.get(international_name=medcine_name)
-                medcine_object.general_url_name = medcine_name.lower().replace(" ","")[:8]
+                medcine_object.general_url_name = medcine_name.lower().replace(" ", "")[:8]
                 medcine_object.save()
                 synonyms = SynonymsFormSet(request.POST, instance=medcine_object)
                 sources = SourcesFormSet(request.POST, instance=medcine_object)
@@ -136,6 +145,7 @@ class Update_base(LoginRequiredMixin, ListView):
         context['general_url_name'] = Medcine.objects.all()
         return context
 
+
 @login_required()
 def update_medcine(request, general_url_name):
     SynonymsFormSet = inlineformset_factory(Medcine, Synonyms, form=Add_synonyms, can_delete=True, extra=2)
@@ -156,7 +166,7 @@ def update_medcine(request, general_url_name):
                         source.save()
                 for synonym in synonyms_formset:
                     if synonym.cleaned_data:
-                       synonym.save()
+                        synonym.save()
                 medcine_object.save()
                 messages.add_message(request, messages.SUCCESS, "Запись обновлена")
                 return redirect('start_page:update')
@@ -179,14 +189,10 @@ def update_medcine(request, general_url_name):
         data = {'add_medcine': add_medcine, 'add_synonyms': add_synonyms, 'add_sources': add_sources}
         return render(request, "start_page/create_base.html", context=data)
 
+
 @login_required()
 def delete_medcine(request, pk):
     medcine = Medcine.objects.get(pk=pk)
     medcine.delete()
     messages.add_message(request, messages.INFO, "Запись удалена")
     return redirect('start_page:update')
-
-
-
-
-
