@@ -15,6 +15,7 @@ psycopg2-binary = "*"
 django-bootstrap4 = "*"
 django-crispy-forms = "*"
 pillow = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

@@ -15,16 +15,30 @@ services:
     depends_on:
       - db
   db:
+    container_name: pm_container
     image: postgres:14.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=qwerty7
-      - POSTGRES_DB=pm
+      - POSTGRES_DB=source
       - EMAIL_HOST_USER=grodnopythonclassdemo@gmail.com
       - EMAIL_HOST_PASSWORD=faqcY5-taqses-gofcib
 
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:6.9
+    environment:
+      environment:
+      PGADMIN_DEFAULT_EMAIL: "user@source.com"
+      PGADMIN_DEFAULT_PASSWORD: "1234567"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
 
 volumes:
   postgres_data:

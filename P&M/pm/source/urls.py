@@ -1,4 +1,4 @@
-"""pm URL Configuration
+"""source URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -13,11 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib import admin
+from django.http import HttpResponseNotFound
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,3 +26,21 @@ urlpatterns = [
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+#
+# if settings.DEBUG:
+#     import debug_toolbar
+#     import mimetypes
+#
+#     mimetypes.add_type("application/javascript", ".js", True)
+#
+#     urlpatterns += [
+#         path('__debug__/', include('debug_toolbar.urls')),
+#     ] + urlpatterns
+
+def get_404(request, exception):
+    return HttpResponseNotFound("<h1>Страница не найдена</h1>")
+
+
+handler404 = get_404

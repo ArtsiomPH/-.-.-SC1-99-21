@@ -1,6 +1,6 @@
 {% extends 'auth/base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}База данных{%endblock title%}
+{% block title %}{{title}}{%endblock title%}
 {% block body %}
 {% if messages %}
 {% for message in messages %}
@@ -35,16 +35,22 @@
         </ul>
     </div>
     <br>
+    {% if page_obj.has_other_pages %}
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
+
             {% if page_obj.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1"
                    aria-disabled="true">Предыдущая</a>
             </li>
             {% endif %}
-            {% for page_obj in page_obj.paginator %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            {% for page in paginator.page_range %}
+            {% if page_obj.number == page %}
+             <li class="page-link">{{ page }}</li>
+            {% elif page >= page_obj.number|add:-2 and page <= page_obj.number|add:+2 %}
+            <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
             {% endfor %}
             {% if page_obj.has_next %}
             <li class="page-item">
@@ -53,5 +59,6 @@
             {% endif %}
         </ul>
     </nav>
+    {% endif %}
 </div>
 {% endblock body %}

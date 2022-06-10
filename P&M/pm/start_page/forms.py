@@ -31,12 +31,11 @@ class Add_medcine(ModelForm):
     general_documentation = forms.URLField(required=False, label='Ссылка на документацию', widget=forms.URLInput(
         attrs={'placeholder': 'https://example.com', 'autocomplete': 'off'}),
                                            error_messages={'invalid': 'Введите ссылку в нужном формате'})
-    formula = forms.ImageField(label='Химическая формула', required=False)
 
     class Meta:
         model = Medcine
-        fields = ['international_name', 'general_info', 'general_documentation']
-        labels = ['МНН', 'Информация']
+        fields = ['international_name', 'general_info', 'general_documentation', 'formula']
+
 
 
 class Add_synonyms(ModelForm):
