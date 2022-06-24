@@ -13,12 +13,14 @@ class MedcineViewSet(viewsets.ModelViewSet):
     serializer_class = MedcineSerializer
     queryset = Medcine.objects.all()
     permission_classes = (AdminOrReadonly, )
+    authentication_classes = TokenAuthentication
 
 
 class SynonymsViewSet(viewsets.ModelViewSet):
     serializer_class = SynonymsSerializer
     queryset = Synonyms.objects.all()
     permission_classes = (AdminOrReadonly, )
+    authentication_classes = TokenAuthentication
 
 
 # class MedcineApiList(ListCreateAPIView):
