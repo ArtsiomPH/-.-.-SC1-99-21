@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import Add_medcine, Add_synonyms, Add_literature
 from .models import Medcine, Synonyms, General_sources
-from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib import messages
@@ -48,15 +47,6 @@ def search_param(request, url_name):
         data = {"medcine": medcine, "synonym": synonym, "all_synonyms": all_synonyms,
                 "sources": general_sources}
         return render(request, "start_page/search.html", context=data)
-
-
-@login_required
-def add_tags(request):
-    synonyms = Synonyms.objects.all()
-    data = []
-    for synonym in synonyms:
-        data.append(synonym.comm_name)
-    return JsonResponse(data, safe=False)
 
 
 @login_required
@@ -160,6 +150,5 @@ class DeleteMedcine(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Удаление записи'
         return context
-
 
 

@@ -41,10 +41,13 @@ INSTALLED_APPS = [
     'bootstrap4',
     'crispy_forms',
     'debug_toolbar',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     # site apps
     'start_page.apps.StartpageConfig',
     'authentication.apps.AuthenticationConfig',
-
+    'api_pm.apps.ApiPmConfig'
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -124,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Minsk'
 
 USE_I18N = True
 
@@ -164,13 +167,30 @@ DEFAULT_FROM_EMAIL = 'grodnopythonclassdemo@gmail.com'
 
 # bootstrap messages
 MESSAGE_TAGS = {
-        messages.DEBUG: 'alert-secondary',
-        messages.INFO: 'alert-info',
-        messages.SUCCESS: 'alert-success',
-        messages.WARNING: 'alert-warning',
-        messages.ERROR: 'alert-danger',
- }
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 # debug_toolbar
 # INTERNAL_IPS = [
 #     "127.0.0.1",
 # ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer'
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
+}

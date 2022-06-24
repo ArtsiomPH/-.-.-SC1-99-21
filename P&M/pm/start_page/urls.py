@@ -3,6 +3,7 @@ from .views import *
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 
+
 app_name = "start_page"
 urlpatterns = [
     path('base/delete/<int:pk>', DeleteMedcine.as_view(), name='delete'),
@@ -16,5 +17,5 @@ urlpatterns = [
     path('search/<str:url_name>', search_param, name="search_param"),
     path('error/', TemplateView.as_view(template_name="start_page/not_in_base.html"), name="error"),
     path('', index, name='home'),
-    path('api/tags/', add_tags, name='tags')
+
 ]

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
     <style>
-        .ui-widget{
+        .ui-widget {
             border-radius: 5px;
             color: #B4B8B6;
             font-style: italic;
@@ -23,9 +23,11 @@
         <div class="container-fluid">
             <div class="col-sm-12 col-md-5 col-lg-7">
                 <a href="/" class="navbar-brand mb-0" style="font-size: x-large">Pregnancy and medicine</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'start_page:base' %}"><button class="btn btn-outline-secondary" type="submit">База данных</button></a>
-            {% endif %}
+                {% if user.is_authenticated %}
+                <a href="{% url 'start_page:base' %}">
+                    <button class="btn btn-outline-secondary" type="submit">База данных</button>
+                </a>
+                {% endif %}
             </div>
             <div class="col-sm-12 col-md-7 col-lg-5 ui-widget">
                 <form class="d-flex" method="get" autocomplete="off" action="{% url 'start_page:search' %}">
@@ -69,30 +71,31 @@
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script>
     $(function () {
-        var availableTags = ["Панадол",
-            "Цефекон",
-            "Эффералган",
-            "Алка-зельтцер",
-            "Аспирин",
-            "Ацетилсалициловая кислота",
-            "Ренни",
-            "Рэникзон",
-            "Гамифрон",
-            "Канефрон",
-            "Вольтарен",
-            "Диклофенак",
-            "Ибуфен",
-            "Ибуфлекс",
-            "Миг",
-            "Депакин",
-            "Энкорат"
-        ];
-        // var url = "{% url 'start_page:tags' %}";
-        // $.getJSON(url, function (data) {
-        //     $.each(data, function (index, value) {
-        //         availableTags.append(value);
-        //     });
-        // });
+        const availableTags = [];
+        // var availableTags = ["Панадол",
+        //     "Цефекон",
+        //     "Эффералган",
+        //     "Алка-зельтцер",
+        //     "Аспирин",
+        //     "Ацетилсалициловая кислота",
+        //     "Ренни",
+        //     "Рэникзон",
+        //     "Гамифрон",
+        //     "Канефрон",
+        //     "Вольтарен",
+        //     "Диклофенак",
+        //     "Ибуфен",
+        //     "Ибуфлекс",
+        //     "Миг",
+        //     "Депакин",
+        //     "Энкорат"
+        // ];
+        const url = "http://127.0.0.1:8000/api/v1/medcine/synonyms/";
+        $.getJSON(url, function (data) {
+            $.each(data, function (index, value) {
+                availableTags.append(value);
+            });
+        });
         $("#search").autocomplete({
             source: availableTags
         });
