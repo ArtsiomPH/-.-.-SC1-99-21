@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.urls import reverse
 
 
-
 class Medcine(models.Model):
     international_name = models.CharField(max_length=300, verbose_name="МНН", unique=True)
     general_url_name = models.CharField(max_length=50, unique=True, verbose_name="Название для URL")
@@ -40,6 +39,7 @@ class Synonyms(models.Model):
     def get_absolute_url(self):
         return reverse("start_page:search_param", kwargs={"url_name": self.url_name})
 
+
 class General_sources(models.Model):
     medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, verbose_name="МНН")
     source_name = models.CharField(max_length=500, blank=True, verbose_name="Название источника")
@@ -51,6 +51,7 @@ class General_sources(models.Model):
 
     def __str__(self):
         return self.source_name
+
 
 class Request_counter(models.Model):
     synonym = models.ForeignKey(Synonyms, on_delete=models.CASCADE, verbose_name="Синоним")
@@ -64,5 +65,3 @@ class Request_counter(models.Model):
 
     def __str__(self):
         return self.synonym.comm_name
-
-

@@ -21,6 +21,8 @@ djoser = "*"
 
 [dev-packages]
 djoser = "*"
+pytest = "*"
+selenium = "*"
 
 [requires]
 python_version = "3.10"
