@@ -25,28 +25,22 @@ def search_medcine(request):
     medcine_name = request.GET.get("medcine_name")
     try:
         synonym = Synonyms.objects.get(comm_name=medcine_name.capitalize())
-    except Synonyms.DoesNotExist:
-        return render(request, "start_page/not_in_base.html",
-                      context={'search_name': medcine_name})
-    else:
         view, created = synonym.request_counter_set.get_or_create(synonym=synonym.id, date=timezone.now())
         view.count = view.count + 1
         view.save(update_fields=["count"])
         return redirect("start_page:search_param", synonym.url_name)
+    except Synonyms.DoesNotExist:
+        return redirect("start_page:error", permanent=False)
 
 
 def search_param(request, url_name):
-    try:
-        synonym = Synonyms.objects.get(url_name=url_name)
-    except Synonyms.DoesNotExist:
-        return redirect("start_page:error")
-    else:
-        medcine = Medcine.objects.get(synonyms__url_name=url_name)
-        all_synonyms = medcine.synonyms_set.all().exclude(url_name=url_name)
-        general_sources = medcine.general_sources_set.all()
-        data = {"medcine": medcine, "synonym": synonym, "all_synonyms": all_synonyms,
-                "sources": general_sources}
-        return render(request, "start_page/search.html", context=data)
+    synonym = Synonyms.objects.get(url_name=url_name)
+    medcine = Medcine.objects.get(synonyms__url_name=url_name)
+    all_synonyms = medcine.synonyms_set.all().exclude(url_name=url_name)
+    general_sources = medcine.general_sources_set.all()
+    data = {"medcine": medcine, "synonym": synonym, "all_synonyms": all_synonyms,
+            "sources": general_sources}
+    return render(request, "start_page/search.html", context=data)
 
 
 @login_required
@@ -150,5 +144,4 @@ class DeleteMedcine(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Удаление записи'
         return context
-
 

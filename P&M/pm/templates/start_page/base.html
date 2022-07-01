@@ -90,7 +90,7 @@
         //     "Депакин",
         //     "Энкорат"
         // ];
-        const url = "http://127.0.0.1:8000/api/v1/medcine/synonyms/";
+        const url = "http://127.0.0.1:8000/api/v1/synonyms/synonyms_comm_name/";
         $.getJSON(url, function (data) {
             $.each(data, function (index, value) {
                 availableTags.append(value);

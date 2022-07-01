@@ -41,7 +41,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #     ] + urlpatterns
 
 def get_404(request, exception):
-    return HttpResponseNotFound("<h1>Страница не найдена</h1>")
+    return render("<h1>Страница не найдена</h1>")
 
 
 handler404 = get_404

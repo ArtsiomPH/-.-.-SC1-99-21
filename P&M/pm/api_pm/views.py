@@ -19,8 +19,13 @@ class MedcineViewSet(viewsets.ModelViewSet):
 class SynonymsViewSet(viewsets.ModelViewSet):
     serializer_class = SynonymsSerializer
     queryset = Synonyms.objects.all()
-    permission_classes = (AdminOrReadonly, )
-    authentication_classes = TokenAuthentication
+    # permission_classes = (AdminOrReadonly, )
+    # authentication_classes = TokenAuthentication
+
+    @action(methods=['get'], detail=False)
+    def synonyms_comm_name(self, request):
+        synonyms = Synonyms.objects.all()
+        return Response({'comm_names': [synonym.comm_name for synonym in synonyms]})
 
 
 # class MedcineApiList(ListCreateAPIView):

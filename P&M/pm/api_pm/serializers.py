@@ -1,5 +1,6 @@
 from rest_framework import serializers
 # from rest_framework.renderers import JSONRenderer
+from rest_framework.decorators import action
 
 from start_page.models import Medcine, Synonyms
 
@@ -12,10 +13,11 @@ class MedcineSerializer(serializers.ModelSerializer):
 
 class SynonymsSerializer(serializers.ModelSerializer):
     medcine = serializers.CharField()
-
     class Meta:
         model = Synonyms
         fields = ('pk', 'comm_name', 'url_name', 'medcine')
+
+
 
 # class MedcineSerializer(serializers.Serializer):
 #     pk = serializers.IntegerField(read_only=True)
