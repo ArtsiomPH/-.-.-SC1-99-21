@@ -25,7 +25,7 @@ class SearchFormTest(FunctionalTest, unittest.TestCase):
     def test_search_form_excist_medcine(self):
         self.browser.get('http://127.0.0.1:8000/')
 
-        input_box = self.browser.find_element(By.ID, 'search')
+        input_box = self.get_search_form()
         self.assertEqual('Введите название препарата', input_box.get_attribute('placeholder'))
 
         input_box.send_keys('Ибуфен')
@@ -36,8 +36,16 @@ class SearchFormTest(FunctionalTest, unittest.TestCase):
     def test_search_form_not_excist_medcine(self):
         self.browser.get('http://127.0.0.1:8000/')
 
-        input_box = self.browser.find_element(By.ID, 'search')
+        input_box = self.get_search_form()
 
         input_box.send_keys('sfggd')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_string('Препарата нет в базе данных', By.TAG_NAME, 'p')
+
+    def test_cannot_add_empty_item(self):
+        self.browser.get('http://127.0.0.1:8000/')
+        self.get_search_form().send_keys(Keys.ENTER)
+
+        self.wait_for_string("Заполните это поле", By.CSS_SELECTOR, '.has-error')
+
+

@@ -28,7 +28,7 @@ def search_medcine(request):
         view, created = synonym.request_counter_set.get_or_create(synonym=synonym.id, date=timezone.now())
         view.count = view.count + 1
         view.save(update_fields=["count"])
-        return redirect("start_page:search_param", synonym.url_name)
+        return redirect(synonym)
     except Synonyms.DoesNotExist:
         return redirect("start_page:error", permanent=False)
 
@@ -116,6 +116,7 @@ def update_medcine(request, general_url_name):
             medcine_name = new_medcine.cleaned_data['international_name']
             medcine_object.general_url_name = medcine_name.lower().replace(" ", "").replace(",", "")[:10]
             medcine_object.save()
+            medcine_object.full_clean()
             synonyms_formset = SynonymsFormSet(request.POST, instance=medcine_object)
             sources_formset = SourcesFormSet(request.POST, instance=medcine_object)
             if sources_formset.is_valid() and synonyms_formset.is_valid():

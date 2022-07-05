@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+
 
 class FunctionalTest:
     def setUp(self) -> None:
@@ -9,3 +11,6 @@ class FunctionalTest:
 
     def tearDown(self) -> None:
         self.browser.quit()
+
+    def get_search_form(self):
+        return self.browser.find_element(By.ID, 'search')

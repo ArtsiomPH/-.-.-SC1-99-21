@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 
 
 class Search(forms.Form):
-    medcine_name = forms.CharField(max_length=40, min_length=3,
+    medcine_name = forms.CharField(max_length=40, min_length=3, required=True,
                                    widget=forms.TextInput(attrs={'class': 'form-control me-5',
                                                                  'placeholder': 'Введите название препарата',
                                                                  "id": "search"}), label="")
@@ -16,7 +16,7 @@ class Add_medcine(ModelForm):
         regex='^[A-Z][a-z0-9 ,-]+$'
     )],
                                          error_messages={'invalid': 'Введите название латиницей с большой буквы',
-                                                         'null': 'Поле обязательно для заполнения'},
+                                                         'required': 'Поле обязательно для заполнения'},
                                          help_text="Ввод латиницей с большой буквы",
                                          widget=forms.TextInput(attrs={'autocomplete': 'off'}))
 

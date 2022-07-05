@@ -1,6 +1,6 @@
 from django.test import TestCase
-from .models import Medcine, Synonyms
-
+from start_page.forms import Search, Add_medcine
+from django.utils.html import escape
 
 class HomePageTest(TestCase):
     def test_uses_start_page(self):
@@ -15,6 +15,13 @@ class HomePageTest(TestCase):
         response = self.client.get("/search/", {"medcine_name": "ssss"})
         self.assertRedirects(response, '/error/')
 
+    def test_start_page_uses_search_form(self):
+        response = self.client.get("/")
+        self.assertIsInstance(response.context["form"], Search)
 
+    def test_validation_errors_are_sent_back_to_home_page_template(self):
+        response = self.client.get("/base/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'start_page/base_operations.html')
 
 
