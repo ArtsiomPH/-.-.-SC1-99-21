@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Medcine, Synonyms, General_sources
+from .models import Medcine, Synonyms, GeneralSources
 from django.core.validators import RegexValidator
 
 
@@ -62,5 +62,5 @@ class Add_literature(ModelForm):
                                                   'min_length': 'Минимум 10 символов'})
 
     class Meta:
-        model = General_sources
+        model = GeneralSources
         fields = ['source_name']

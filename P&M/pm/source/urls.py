@@ -20,6 +20,7 @@ from django.http import HttpResponseNotFound
 from django.urls import path, include
 
 urlpatterns = [
+    path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('api_pm.urls')),
     path('auth/', include('authentication.urls')),

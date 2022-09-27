@@ -1,27 +1,14 @@
-from selenium.common import WebDriverException
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
+from start_page.models import Synonyms, Medcine
 
-import time
 import unittest
 
 
-class SearchFormTest(FunctionalTest, unittest.TestCase):
-    MAX_WAIT = 10
-
-    def wait_for_string(self, expected_string, setting, setting_name):
-        start_time = time.time()
-        while True:
-            try:
-                info = self.browser.find_element(setting, setting_name)
-                self.assertIn(expected_string, info.text)
-                return
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > self.MAX_WAIT:
-                    return e
-                return time.sleep(0.5)
-
+class SearchFormTest(FunctionalTest):
     def test_search_form_excist_medcine(self):
         self.browser.get('http://127.0.0.1:8000/')
 
@@ -31,21 +18,21 @@ class SearchFormTest(FunctionalTest, unittest.TestCase):
         input_box.send_keys('Ибуфен')
         input_box.send_keys(Keys.ENTER)
 
-        self.wait_for_string('ИБУФЕН', By.ID, 'info')
+        self.wait_for_string(lambda: self.assertIn("ИБУФЕН", self.browser.find_element(By.ID, 'info').text))
 
     def test_search_form_not_excist_medcine(self):
-        self.browser.get('http://127.0.0.1:8000/')
+        self.browser.get(self.live_server_url)
 
         input_box = self.get_search_form()
 
         input_box.send_keys('sfggd')
         input_box.send_keys(Keys.ENTER)
-        self.wait_for_string('Препарата нет в базе данных', By.TAG_NAME, 'p')
+        self.wait_for_string(lambda: self.assertIn('Препарата нет в базе данных', self.browser.find_element(By.TAG_NAME,
+                                                                                                            'p').text))
 
     def test_cannot_add_empty_item(self):
-        self.browser.get('http://127.0.0.1:8000/')
-        self.get_search_form().send_keys(Keys.ENTER)
+        self.browser.get(self.live_server_url)
+        self.browser.find_element(By.TAG_NAME, "button").click()
 
-        self.wait_for_string("Заполните это поле", By.CSS_SELECTOR, '.has-error')
-
-
+        self.wait_for_string(lambda: self.assertEqual("nvghjjdhg", self.browser.find_element(By.CSS_SELECTOR,
+                                                                                             '.has-error').text))

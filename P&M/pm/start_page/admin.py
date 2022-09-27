@@ -23,14 +23,14 @@ class SynonymsAdmin(admin.ModelAdmin):
     prepopulated_fields = {'url_name': ('comm_name',)}
 
 
-@admin.register(General_sources)
+@admin.register(GeneralSources)
 class GeneralSourcesAdmin(admin.ModelAdmin):
     list_display = ["source_name", "medcine"]
     list_display_links = ["source_name"]
     search_fields = ["source_name", "medcine__international_name"]
 
 
-@admin.register(Request_counter)
+@admin.register(RequestCounter)
 class RequestCounterAdmin(admin.ModelAdmin):
     list_display = ["synonym", "count", "date"]
     list_display_links = ["synonym"]

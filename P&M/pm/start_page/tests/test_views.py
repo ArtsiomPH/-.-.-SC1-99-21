@@ -1,6 +1,12 @@
+import unittest
+
+import start_page
+from start_page.views import *
+from django.http import HttpRequest
 from django.test import TestCase
 from start_page.forms import Search, Add_medcine
 from django.utils.html import escape
+from unittest.mock import patch, Mock
 
 class HomePageTest(TestCase):
     def test_uses_start_page(self):
@@ -19,9 +25,17 @@ class HomePageTest(TestCase):
         response = self.client.get("/")
         self.assertIsInstance(response.context["form"], Search)
 
-    def test_validation_errors_are_sent_back_to_home_page_template(self):
-        response = self.client.get("/base/")
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'start_page/base_operations.html')
+
+class IsoTest(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self.request = HttpRequest()
+
+    @patch('start_page.views.render')
+    def test_start_page_render(self, mock_render):
+        response = index(self.request)
+        self.assertEqual(response, mock_render.return_value)
+
+
 
 

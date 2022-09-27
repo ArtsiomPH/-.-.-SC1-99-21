@@ -1,0 +1,18 @@
+{% extends 'auth/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Профиль{%endblock title%}
+{%block body%}
+{% if user.is_authenticated %}
+<div class="container-fluid d-flex h-100 justify-content-center align-items-center p-5">
+    <div class="row bg-white shadow-sm">
+        <div class="col border rounded p-4">
+        <h3 class="text-center mb-6">Здравствуйте <b>{{user.username}}</b>! Вы вошли в базу данных P&M.</h3>
+        <br>
+        <a href="{% url 'authentication:password_change' %}"><button class="btn btn-primary" type="button" value="password_change">Сменить пароль</button></a>
+        <a href="{% url 'start_page:base' %}"><button class="btn btn-primary" type="button" value="logout">Редактировать базу данных</button></a>
+        <a href="{% url 'authentication:logout' %}"><button class="btn btn-outline-dark" type="button" value="logout">Выйти</button></a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

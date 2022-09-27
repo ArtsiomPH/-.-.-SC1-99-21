@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from .base import FunctionalTest
 
 
-class NewVisitorTest(FunctionalTest, StaticLiveServerTestCase):
+class NewVisitorTest(FunctionalTest):
     def test_start_page(self):
         self.browser.get(self.live_server_url)
 

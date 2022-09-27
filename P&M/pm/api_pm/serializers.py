@@ -1,6 +1,5 @@
 from rest_framework import serializers
 # from rest_framework.renderers import JSONRenderer
-from rest_framework.decorators import action
 
 from start_page.models import Medcine, Synonyms
 

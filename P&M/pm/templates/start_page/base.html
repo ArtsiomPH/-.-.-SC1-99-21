@@ -21,21 +21,21 @@
 <div class="container" id="nav">
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #F5DFC3; border-radius: 5px">
         <div class="container-fluid">
-            <div class="col-sm-12 col-md-5 col-lg-7">
+            <div class="col-sm-12 col-md-4 col-lg-4">
                 <a href="/" class="navbar-brand mb-0" style="font-size: x-large">Pregnancy and medicine</a>
                 {% if user.is_authenticated %}
                 <a href="{% url 'start_page:base' %}">
-                    <button class="btn btn-outline-secondary" type="submit">База данных</button>
+                    <button class="btn btn-outline-secondary" type="submit" id="base">База данных</button>
                 </a>
                 {% endif %}
             </div>
-            <div class="col-sm-12 col-md-7 col-lg-5 ui-widget">
-                <form class="d-flex" method="get" autocomplete="off" action="{% url 'start_page:search' %}">
-                    {% search_form %}
-                    <button class="btn btn-outline-secondary" type="submit">Поиск</button>
-                </form>
+                    <div class="col-sm-12 col-md-4 col-lg-4 ui-widget">
+                        <form class="d-flex" method="get" autocomplete="off" action="{% url 'start_page:search' %}">
+                            {% search_form %}
+                            <button class="btn btn-outline-secondary" type="submit">Поиск</button>
+                        </form>
+                    </div>
             </div>
-        </div>
     </nav>
 </div>
 <br>

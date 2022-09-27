@@ -40,7 +40,7 @@ class Synonyms(models.Model):
         return reverse("start_page:search_param", kwargs={"url_name": self.url_name})
 
 
-class General_sources(models.Model):
+class GeneralSources(models.Model):
     medcine = models.ForeignKey(Medcine, on_delete=models.CASCADE, verbose_name="МНН")
     source_name = models.CharField(max_length=500, blank=True, verbose_name="Название источника")
 
@@ -53,7 +53,7 @@ class General_sources(models.Model):
         return self.source_name
 
 
-class Request_counter(models.Model):
+class RequestCounter(models.Model):
     synonym = models.ForeignKey(Synonyms, on_delete=models.CASCADE, verbose_name="Синоним")
     count = models.PositiveIntegerField(default=0, verbose_name="Число запросов")
     date = models.DateField(default=timezone.now, verbose_name="Дата запроса")

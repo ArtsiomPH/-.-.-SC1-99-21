@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", 'zMSmyKrbOwBSQ7p1B5c9fJh9d5zmawR')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = int(os.environ.get("DEBUG", 1))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", ['127.0.0.1'])
 
@@ -47,12 +47,16 @@ INSTALLED_APPS = [
     # site apps
     'start_page.apps.StartpageConfig',
     'authentication.apps.AuthenticationConfig',
-    'api_pm.apps.ApiPmConfig'
+    'api_pm.apps.ApiPmConfig',
+
 
 ]
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
 
@@ -153,7 +156,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # auth settings
 LOGIN_URL = 'authentication:login'
-LOGIN_REDIRECT_URL = "authentication:login"
+LOGIN_REDIRECT_URL = "authentication:profile"
 LOGOUT_REDIRECT_URL = "authentication:login"
 
 # stmp email configuration
@@ -174,9 +177,9 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 # debug_toolbar
-# INTERNAL_IPS = [
-#     "127.0.0.1",
-# ]
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 
 REST_FRAMEWORK = {
